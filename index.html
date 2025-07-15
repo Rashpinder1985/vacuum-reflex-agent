@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vacuum Agent App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" href="icon.png" type="image/png" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdfdfd;
+      padding: 40px;
+      text-align: center;
+    }
+    .node {
+      border: 2px solid #555;
+      border-radius: 10px;
+      padding: 16px 24px;
+      display: inline-block;
+      background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+      margin: 10px;
+      transition: transform 0.3s ease, background 0.3s ease;
+      cursor: pointer;
+    }
+    .node:hover {
+      transform: scale(1.05);
+      background: #d1f0ff;
+    }
+    .arrow {
+      font-size: 24px;
+      margin: 10px 0;
+      animation: bounce 1s infinite alternate;
+    }
+    .flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .branch {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .subflow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-5px); }
+    }
+    .highlight {
+      box-shadow: 0 0 10px #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 Simple Reflex Vacuum Agent - Flow Diagram</h1>
+  <p>Click any node to highlight the path the agent takes.</p>
+
+  <div class="flow">
+    <div class="node" onclick="highlight(this)">Start: Location = A</div>
+    <div class="arrow">⬇️</div>
+
+    <div class="node" onclick="highlight(this)">Perceive: (Location, Dirty?)</div>
+    <div class="arrow">⬇️</div>
+
+    <div class="node" onclick="highlight(this)">Is Room Dirty?</div>
+    <div class="branch">
+      <div class="subflow">
+        <div class="arrow">Yes ⬅️</div>
+        <div class="node" onclick="highlight(this)">Action: Suck</div>
+        <div class="arrow">⬇️</div>
+        <div class="node" onclick="highlight(this)">Stay in Room</div>
+      </div>
+      <div class="subflow">
+        <div class="arrow">➡️ No</div>
+        <div class="node" onclick="highlight(this)">Is Location A?</div>
+        <div class="branch">
+          <div class="subflow">
+            <div class="arrow">Yes ⬅️</div>
+            <div class="node" onclick="highlight(this)">Action: MoveRight</div>
+            <div class="node" onclick="highlight(this)">Location = B</div>
+          </div>
+          <div class="subflow">
+            <div class="arrow">➡️ No</div>
+            <div class="node" onclick="highlight(this)">Action: MoveLeft</div>
+            <div class="node" onclick="highlight(this)">Location = A</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function highlight(elem) {
+      document.querySelectorAll('.node').forEach(n => n.classList.remove('highlight'));
+      elem.classList.add('highlight');
+    }
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.log('Service Worker Failed:', err));
+    }
+  </script>
+</body>
+</html>
